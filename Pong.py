@@ -70,6 +70,32 @@ def paddle_2_down():
     y -= 20
     paddle_2.sety(y)
 
+def move_ball():
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
+
+def border_check():
+    if ball.ycor() > 290:
+        ball.sety(290)
+        ball.dy *= -1
+        winsound.PlaySound("Bounce1.wav", winsound.SND_ASYNC)
+
+    if ball.ycor() < -290:
+        ball.sety(-290)
+        ball.dy *= -1
+        winsound.PlaySound("Bounce1.wav", winsound.SND_ASYNC)
+
+def collision():
+    if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_2.ycor() + 40 and ball.ycor() > paddle_2.ycor() - 40):
+        ball.setx(340)
+        ball.dx *= -1
+        winsound.PlaySound("Bounce2.wav", winsound.SND_ASYNC)
+    
+    if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_1.ycor() + 40 and ball.ycor() > paddle_1.ycor() - 40):
+        ball.setx(-340)
+        ball.dx *= -1
+        winsound.PlaySound("Bounce2.wav", winsound.SND_ASYNC)
+
 # Keyboard Binding
 window.listen()     # Listen for keyboard input
 window.onkeypress(paddle_1_up, "w")
@@ -82,19 +108,10 @@ while True:
     window.update()
 
     # Move ball
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    move_ball()
 
     # Border check
-    if ball.ycor() > 290:
-        ball.sety(290)
-        ball.dy *= -1
-        winsound.PlaySound("Bounce1.wav", winsound.SND_ASYNC)
-
-    if ball.ycor() < -290:
-        ball.sety(-290)
-        ball.dy *= -1
-        winsound.PlaySound("Bounce1.wav", winsound.SND_ASYNC)
+    border_check()
     
     if ball.xcor() > 390:
         ball.goto(0, 0)
@@ -111,12 +128,4 @@ while True:
         pen.write("Player 1: {}  Player 2: {}".format(score_1, score_2), align = "center", font = ("Courier", 24, "normal"))
 
     # Paddle and ball collision
-    if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_2.ycor() + 40 and ball.ycor() > paddle_2.ycor() - 40):
-        ball.setx(340)
-        ball.dx *= -1
-        winsound.PlaySound("Bounce2.wav", winsound.SND_ASYNC)
-    
-    if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_1.ycor() + 40 and ball.ycor() > paddle_1.ycor() - 40):
-        ball.setx(-340)
-        ball.dx *= -1
-        winsound.PlaySound("Bounce2.wav", winsound.SND_ASYNC)
+    collision()
